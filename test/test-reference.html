@@ -54,7 +54,7 @@
   var TEST_FILENAME_FILTERS = [
     {regex: /webgl/, condition: Modernizr.webgl},
     {regex: /acceleration/, condition: Modernizr.webgl},
-    {regex: /sound/, condition: Modernizr.webaudio}
+    {regex: /sound/, condition: false && Modernizr.webaudio}
   ];
   var MS_TIMEOUT = 4000;
   var fxns = [
