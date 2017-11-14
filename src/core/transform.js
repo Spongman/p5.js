@@ -9,6 +9,7 @@
 'use strict';
 
 var p5 = require('./main');
+var constants = require('./constants');
 
 /**
  * Multiplies the current matrix by the one specified through the parameters.
@@ -502,7 +503,7 @@ p5.prototype.shearY = function(angle) {
  */
 p5.prototype.translate = function(x, y, z) {
   p5._validateParameters('translate', arguments);
-  if (this._renderer.isP3D) {
+  if (this._renderer._type === constants.WEBGL) {
     this._renderer.translate(x, y, z);
   } else {
     this._renderer.translate(x, y);

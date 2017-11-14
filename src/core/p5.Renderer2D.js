@@ -14,8 +14,10 @@ require('./p5.Renderer');
 var styleEmpty = 'rgba(0,0,0,0)';
 // var alphaThreshold = 0.00125; // minimum visible
 
-p5.Renderer2D = function(elt, pInst, isMainCanvas) {
-  p5.Renderer.call(this, elt, pInst, isMainCanvas);
+p5.Renderer2D = function(pInst, isMainCanvas) {
+  this.canvas = document.createElement('canvas');
+  p5.Renderer.call(this, this.canvas, pInst, constants.P2D, isMainCanvas);
+
   this.drawingContext = this.canvas.getContext('2d');
   this._pInst._setProperty('drawingContext', this.drawingContext);
   return this;
@@ -33,6 +35,10 @@ p5.Renderer2D.prototype._applyDefaults = function() {
 
 p5.Renderer2D.prototype.resize = function(w, h) {
   p5.Renderer.prototype.resize.call(this, w, h);
+
+  this.elt.width = w * this._pInst._pixelDensity;
+  this.elt.height = h * this._pInst._pixelDensity;
+
   this.drawingContext.scale(
     this._pInst._pixelDensity,
     this._pInst._pixelDensity
@@ -484,14 +490,10 @@ p5.Renderer2D.prototype.arc = function(x, y, w, h, start, stop, mode) {
   return this;
 };
 
-p5.Renderer2D.prototype.ellipse = function(args) {
+p5.Renderer2D.prototype.ellipse = function(x, y, w, h) {
   var ctx = this.drawingContext;
   var doFill = this._doFill,
     doStroke = this._doStroke;
-  var x = args[0],
-    y = args[1],
-    w = args[2],
-    h = args[3];
   if (doFill && !doStroke) {
     if (this._getFill() === styleEmpty) {
       return this;
@@ -595,15 +597,7 @@ p5.Renderer2D.prototype.quad = function(x1, y1, x2, y2, x3, y3, x4, y4) {
   return this;
 };
 
-p5.Renderer2D.prototype.rect = function(args) {
-  var x = args[0],
-    y = args[1],
-    w = args[2],
-    h = args[3],
-    tl = args[4],
-    tr = args[5],
-    br = args[6],
-    bl = args[7];
+p5.Renderer2D.prototype.rect = function(x, y, w, h, tl, tr, br, bl) {
   var ctx = this.drawingContext;
   var doFill = this._doFill,
     doStroke = this._doStroke;
@@ -688,16 +682,10 @@ p5.Renderer2D.prototype.rect = function(args) {
   return this;
 };
 
-p5.Renderer2D.prototype.triangle = function(args) {
+p5.Renderer2D.prototype.triangle = function(x1, y1, x2, y2, x3, y3) {
   var ctx = this.drawingContext;
   var doFill = this._doFill,
     doStroke = this._doStroke;
-  var x1 = args[0],
-    y1 = args[1];
-  var x2 = args[2],
-    y2 = args[3];
-  var x3 = args[4],
-    y3 = args[5];
   if (doFill && !doStroke) {
     if (this._getFill() === styleEmpty) {
       return this;
@@ -1058,27 +1046,6 @@ p5.Renderer2D.prototype._setStroke = function(strokeStyle) {
 };
 
 //////////////////////////////////////////////
-// SHAPE | Curves
-//////////////////////////////////////////////
-p5.Renderer2D.prototype.bezier = function(x1, y1, x2, y2, x3, y3, x4, y4) {
-  this._pInst.beginShape();
-  this._pInst.vertex(x1, y1);
-  this._pInst.bezierVertex(x2, y2, x3, y3, x4, y4);
-  this._pInst.endShape();
-  return this;
-};
-
-p5.Renderer2D.prototype.curve = function(x1, y1, x2, y2, x3, y3, x4, y4) {
-  this._pInst.beginShape();
-  this._pInst.curveVertex(x1, y1);
-  this._pInst.curveVertex(x2, y2);
-  this._pInst.curveVertex(x3, y3);
-  this._pInst.curveVertex(x4, y4);
-  this._pInst.endShape();
-  return this;
-};
-
-//////////////////////////////////////////////
 // SHAPE | Vertex
 //////////////////////////////////////////////
 
@@ -1110,7 +1077,6 @@ p5.Renderer2D.prototype.resetMatrix = function() {
     this._pInst._pixelDensity,
     this._pInst._pixelDensity
   );
-  return this;
 };
 
 p5.Renderer2D.prototype.rotate = function(rad) {
@@ -1217,14 +1183,11 @@ p5.Renderer2D.prototype._applyTextProperties = function() {
   var font,
     p = this._pInst;
 
-  this._setProperty('_textAscent', null);
-  this._setProperty('_textDescent', null);
+  p5.Renderer.prototype._applyTextProperties.apply(this, arguments);
 
   font = this._textFont;
-
   if (this._isOpenType()) {
     font = this._textFont.font.familyName;
-    this._setProperty('_textStyle', this._textFont.font.styleName);
   }
 
   this.drawingContext.font =

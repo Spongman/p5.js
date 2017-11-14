@@ -83,6 +83,8 @@ require('./webgl/p5.Shader');
 require('./webgl/p5.Texture');
 require('./webgl/text');
 
+require('./svg/p5.RendererSVG');
+
 require('./core/init');
 
 module.exports = p5;

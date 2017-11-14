@@ -11,15 +11,20 @@ var PI = Math.PI;
 module.exports = {
   // GRAPHICS RENDERER
   /**
-   * @property {String} P2D
+   * @property {String} P2D the 2d canvas renderer
    * @final
    */
   P2D: 'p2d',
   /**
-   * @property {String} WEBGL
+   * @property {String} WEBGL the 3d webgl canvas renderer
    * @final
    */
   WEBGL: 'webgl',
+  /**
+   * @property {String} SVG the 2d SVG renderer
+   * @final
+   */
+  SVG: 'svg',
 
   // ENVIRONMENT
   /**

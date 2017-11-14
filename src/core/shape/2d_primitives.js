@@ -201,7 +201,7 @@ p5.prototype.ellipse = function(x, y, w, h, detailX) {
   }
 
   var vals = canvas.modeAdjust(x, y, w, h, this._renderer._ellipseMode);
-  this._renderer.ellipse([vals.x, vals.y, vals.w, vals.h, detailX]);
+  this._renderer.ellipse(vals.x, vals.y, vals.w, vals.h, detailX);
 
   return this;
 };
@@ -458,7 +458,7 @@ p5.prototype.rect = function() {
     for (var i = 4; i < arguments.length; i++) {
       args[i] = arguments[i];
     }
-    this._renderer.rect(args);
+    this._renderer.rect.apply(this._renderer, args);
   }
 
   return this;

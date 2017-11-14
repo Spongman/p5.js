@@ -50,27 +50,11 @@ var defaultShaders = {
  * rendering (FBO).
  *
  */
-p5.RendererGL = function(elt, pInst, isMainCanvas, attr) {
-  p5.Renderer.call(this, elt, pInst, isMainCanvas);
-  this.attributes = {};
-  attr = attr || {};
-  this.attributes.alpha = attr.alpha === undefined ? true : attr.alpha;
-  this.attributes.depth = attr.depth === undefined ? true : attr.depth;
-  this.attributes.stencil = attr.stencil === undefined ? true : attr.stencil;
-  this.attributes.antialias =
-    attr.antialias === undefined ? false : attr.antialias;
-  this.attributes.premultipliedAlpha =
-    attr.premultipliedAlpha === undefined ? false : attr.premultipliedAlpha;
-  this.attributes.preserveDrawingBuffer =
-    attr.preserveDrawingBuffer === undefined
-      ? true
-      : attr.preserveDrawingBuffer;
-  this.attributes.perPixelLighting =
-    attr.perPixelLighting === undefined ? false : attr.perPixelLighting;
-  this._initContext();
-  this.isP3D = true; //lets us know we're in 3d mode
-  this.GL = this.drawingContext;
+p5.RendererGL = function(pInst, isMainCanvas, attr) {
+  var elt = document.createElement('canvas');
+  p5.Renderer.call(this, elt, pInst, constants.WEBGL, isMainCanvas);
 
+  this._initContext();
   // lights
 
   this.ambientLightColors = [];
@@ -92,15 +76,6 @@ p5.RendererGL = function(elt, pInst, isMainCanvas, attr) {
   this._curCamera = new p5.Camera(this);
   this._curCamera._computeCameraDefaultSettings();
   this._curCamera._setDefaultCamera();
-
-  //Geometry & Material hashes
-  this.gHash = {};
-
-  this._defaultLightShader = undefined;
-  this._defaultImmediateModeShader = undefined;
-  this._defaultNormalShader = undefined;
-  this._defaultColorShader = undefined;
-  this._defaultPointShader = undefined;
 
   this.curFillShader = undefined;
   this.curStrokeShader = undefined;
@@ -152,61 +127,68 @@ p5.RendererGL.prototype = Object.create(p5.Renderer.prototype);
 // Setting
 //////////////////////////////////////////////
 
-p5.RendererGL.prototype._initContext = function() {
-  try {
-    this.drawingContext =
-      this.canvas.getContext('webgl', this.attributes) ||
-      this.canvas.getContext('experimental-webgl', this.attributes);
-    if (this.drawingContext === null) {
-      throw new Error('Error creating webgl context');
-    } else {
-      console.log('p5.RendererGL: enabled webgl context');
-      var gl = this.drawingContext;
-      gl.enable(gl.DEPTH_TEST);
-      gl.depthFunc(gl.LEQUAL);
-      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-      this._viewport = this.drawingContext.getParameter(
-        this.drawingContext.VIEWPORT
-      );
-    }
-  } catch (er) {
-    throw er;
+p5.RendererGL.prototype._initContext = function(attr) {
+  this.attributes = {};
+  attr = attr || {};
+  this.attributes.alpha = attr.alpha === undefined ? true : attr.alpha;
+  this.attributes.depth = attr.depth === undefined ? true : attr.depth;
+  this.attributes.stencil = attr.stencil === undefined ? true : attr.stencil;
+  this.attributes.antialias =
+    attr.antialias === undefined ? false : attr.antialias;
+  this.attributes.premultipliedAlpha =
+    attr.premultipliedAlpha === undefined ? false : attr.premultipliedAlpha;
+  this.attributes.preserveDrawingBuffer =
+    attr.preserveDrawingBuffer === undefined
+      ? true
+      : attr.preserveDrawingBuffer;
+
+  this.drawingContext =
+    this.elt.getContext('webgl', this.attributes) ||
+    this.elt.getContext('experimental-webgl', this.attributes);
+  if (this.drawingContext === null) {
+    throw new Error('Error creating webgl context');
   }
+  console.log('p5.RendererGL: enabled webgl context');
+  var gl = (this.GL = this.drawingContext);
+  gl.enable(gl.DEPTH_TEST);
+  gl.depthFunc(gl.LEQUAL);
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  this._viewport = this.drawingContext.getParameter(
+    this.drawingContext.VIEWPORT
+  );
+
+  //Geometry & Material hashes
+  this.gHash = {};
+
+  this._defaultLightShader = undefined;
+  this._defaultImmediateModeShader = undefined;
+  this._defaultNormalShader = undefined;
+  this._defaultColorShader = undefined;
+  this._defaultPointShader = undefined;
+
+  /*
+  this.setFillShader(this._getColorShader());
+  this.setStrokeShader(this._getLineShader());
+  this._setStrokeWeight();
+  this._setStrokeColor();
+  */
+  this._applyDefaults();
 };
 
 //This is helper function to reset the context anytime the attributes
 //are changed with setAttributes()
 
-p5.RendererGL.prototype._resetContext = function(attr, options, callback) {
-  var w = this.width;
-  var h = this.height;
-  var defaultId = this.canvas.id;
-  var c = this.canvas;
-  if (c) {
-    c.parentNode.removeChild(c);
-  }
-  c = document.createElement('canvas');
-  c.id = defaultId;
-  if (this._pInst._userNode) {
-    this._pInst._userNode.appendChild(c);
-  } else {
-    document.body.appendChild(c);
-  }
-  this._pInst.canvas = c;
+p5.RendererGL.prototype._resetContext = function(attr) {
+  var parent = this.elt.parentNode;
+  parent.removeChild(this.elt);
+  var elt = document.createElement('canvas');
+  elt.id = this.elt.id;
+  parent.appendChild(elt);
+  this.elt = this.canvas = elt;
 
-  var renderer = new p5.RendererGL(this._pInst.canvas, this._pInst, true, attr);
-  this._pInst._setProperty('_renderer', renderer);
-  renderer.resize(w, h);
-  renderer._applyDefaults();
-  this._pInst._elements.push(renderer);
+  this._initContext(attr);
 
-  if (typeof callback === 'function') {
-    //setTimeout with 0 forces the task to the back of the queue, this ensures that
-    //we finish switching out the renderer
-    setTimeout(function() {
-      callback.apply(window._renderer, options);
-    }, 0);
-  }
+  this.resize(this.width, this.height);
 };
 /**
  * @module Rendering
@@ -793,9 +775,21 @@ p5.RendererGL.prototype.push = function() {
   return style;
 };
 
+p5.RendererGL.prototype.resize = function(w, h) {
+  p5.Renderer.prototype.resize.apply(this, arguments);
+
+  this.elt.width = w * this._pInst._pixelDensity;
+  this.elt.height = h * this._pInst._pixelDensity;
+};
+
 p5.RendererGL.prototype.resetMatrix = function() {
   this.uMVMatrix = p5.Matrix.identity(this._pInst);
-  return this;
+};
+
+p5.RendererGL.prototype.beginRedraw = function() {
+  p5.Renderer.prototype.beginRedraw.apply(this, arguments);
+
+  this._update();
 };
 
 //////////////////////////////////////////////
@@ -1116,7 +1110,7 @@ p5.RendererGL.prototype._vToNArray = function(arr) {
  * ensures that p5 is using a 3d renderer. throws an error if not.
  */
 p5.prototype._assert3d = function(name) {
-  if (!this._renderer.isP3D)
+  if (this._renderer._type !== constants.WEBGL)
     throw new Error(
       name +
         "() is only supported in WEBGL mode. If you'd like to use 3D graphics" +

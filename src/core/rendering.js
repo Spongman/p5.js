@@ -11,8 +11,6 @@ var constants = require('./constants');
 require('./p5.Graphics');
 require('./p5.Renderer2D');
 require('../webgl/p5.RendererGL');
-var defaultId = 'defaultCanvas0'; // this gets set again in createCanvas
-var defaultClass = 'p5Canvas';
 
 /**
  * Creates a canvas element in the document, and sets the dimensions of it
@@ -52,68 +50,36 @@ var defaultClass = 'p5Canvas';
 
 p5.prototype.createCanvas = function(w, h, renderer) {
   p5._validateParameters('createCanvas', arguments);
-  //optional: renderer, otherwise defaults to p2d
-  var r = renderer || constants.P2D;
-  var c;
+  renderer = renderer || constants.P2D;
 
-  if (r === constants.WEBGL) {
-    c = document.getElementById(defaultId);
-    if (c) {
-      //if defaultCanvas already exists
-      c.parentNode.removeChild(c); //replace the existing defaultCanvas
-      var thisRenderer = this._renderer;
-      this._elements = this._elements.filter(function(e) {
-        return e !== thisRenderer;
-      });
+  var r = this._renderer;
+  if (!r || r._type !== renderer) {
+    if (r) {
+      r.elt.parentNode.removeChild(r.elt);
+      this._elements.splice(this._elements.indexOf(r), 1);
     }
-    c = document.createElement('canvas');
-    c.id = defaultId;
-    c.classList.add(defaultClass);
-  } else {
-    if (!this._defaultGraphicsCreated) {
-      c = document.createElement('canvas');
-      var i = 0;
-      while (document.getElementById('defaultCanvas' + i)) {
-        i++;
-      }
-      defaultId = 'defaultCanvas' + i;
-      c.id = defaultId;
-      c.classList.add(defaultClass);
-    } else {
-      // resize the default canvas if new one is created
-      c = this.canvas;
-    }
+
+    // Init our graphics renderer
+    r = this._createRenderer(renderer, true);
+    this._setProperty('_renderer', r);
+    this._elements.push(r);
   }
 
-  // set to invisible if still in setup (to prevent flashing with manipulate)
-  if (!this._setupDone) {
-    c.dataset.hidden = true; // tag to show later
-    c.style.visibility = 'hidden';
-  }
-
-  if (this._userNode) {
-    // user input node case
-    this._userNode.appendChild(c);
-  } else {
-    document.body.appendChild(c);
-  }
-
-  // Init our graphics renderer
-  //webgl mode
-  if (r === constants.WEBGL) {
-    this._setProperty('_renderer', new p5.RendererGL(c, this, true));
-    this._elements.push(this._renderer);
-  } else {
-    //P2D mode
-    if (!this._defaultGraphicsCreated) {
-      this._setProperty('_renderer', new p5.Renderer2D(c, this, true));
-      this._defaultGraphicsCreated = true;
-      this._elements.push(this._renderer);
-    }
-  }
-  this._renderer.resize(w, h);
-  this._renderer._applyDefaults();
+  r.resize(w, h);
+  r._applyDefaults();
   return this._renderer;
+};
+
+p5.prototype._createRenderer = function(renderer, isMainCanvas) {
+  switch (renderer) {
+    case constants.WEBGL:
+      return new p5.RendererGL(this, isMainCanvas);
+    case constants.SVG:
+      return new p5.RendererSVG(this, isMainCanvas);
+    case constants.P2D:
+    default:
+      return new p5.Renderer2D(this, isMainCanvas);
+  }
 };
 
 /**

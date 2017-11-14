@@ -770,14 +770,7 @@ p5.RendererGL.prototype.point = function(x, y, z) {
   return this;
 };
 
-p5.RendererGL.prototype.triangle = function(args) {
-  var x1 = args[0],
-    y1 = args[1];
-  var x2 = args[2],
-    y2 = args[3];
-  var x3 = args[4],
-    y3 = args[5];
-
+p5.RendererGL.prototype.triangle = function(x1, y1, x2, y2, x3, y3) {
   var gId = 'tri';
   if (!this.geometryInHash(gId)) {
     var _triangle = function() {
@@ -822,28 +815,21 @@ p5.RendererGL.prototype.triangle = function(args) {
   return this;
 };
 
-p5.RendererGL.prototype.ellipse = function(args) {
-  this.arc(
-    args[0],
-    args[1],
-    args[2],
-    args[3],
-    0,
-    constants.TWO_PI,
-    constants.OPEN,
-    args[4]
-  );
+p5.RendererGL.prototype.ellipse = function(x, y, width, height, detail) {
+  this.arc(x, y, width, height, 0, constants.TWO_PI, constants.OPEN, detail);
 };
 
-p5.RendererGL.prototype.arc = function(args) {
-  var x = arguments[0];
-  var y = arguments[1];
-  var width = arguments[2];
-  var height = arguments[3];
-  var start = arguments[4];
-  var stop = arguments[5];
-  var mode = arguments[6];
-  var detail = arguments[7] || 25;
+p5.RendererGL.prototype.arc = function(
+  x,
+  y,
+  width,
+  height,
+  start,
+  stop,
+  mode,
+  detail
+) {
+  detail = detail || 25;
 
   var shape;
   var gId;
@@ -951,14 +937,10 @@ p5.RendererGL.prototype.arc = function(args) {
   return this;
 };
 
-p5.RendererGL.prototype.rect = function(args) {
+p5.RendererGL.prototype.rect = function(x, y, width, height, detailX, detailY) {
   var perPixelLighting = this.attributes.perPixelLighting;
-  var x = args[0];
-  var y = args[1];
-  var width = args[2];
-  var height = args[3];
-  var detailX = args[4] || (perPixelLighting ? 1 : 24);
-  var detailY = args[5] || (perPixelLighting ? 1 : 16);
+  detailX = detailX || (perPixelLighting ? 1 : 24);
+  detailY = detailY || (perPixelLighting ? 1 : 16);
   var gId = 'rect|' + detailX + '|' + detailY;
   if (!this.geometryInHash(gId)) {
     var _rect = function() {

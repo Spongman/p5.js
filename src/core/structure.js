@@ -326,10 +326,7 @@ p5.prototype.redraw = function(n) {
       f.call(context);
     };
     for (var idxRedraw = 0; idxRedraw < numberOfRedraws; idxRedraw++) {
-      context.resetMatrix();
-      if (context._renderer.isP3D) {
-        context._renderer._update();
-      }
+      context._renderer.beginRedraw();
       context._setProperty('frameCount', context.frameCount + 1);
       context._registeredMethods.pre.forEach(callMethod);
       userDraw();

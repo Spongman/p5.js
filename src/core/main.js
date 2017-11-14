@@ -317,8 +317,7 @@ var p5 = function(sketch, node, sync) {
     // will be replaced
     this.createCanvas(
       this._defaultCanvasSize.width,
-      this._defaultCanvasSize.height,
-      'p2d'
+      this._defaultCanvasSize.height
     );
 
     // return preload functions to their normal vals if switched by preload
@@ -339,14 +338,17 @@ var p5 = function(sketch, node, sync) {
     }
 
     // unhide any hidden canvases that were created
-    var canvases = document.getElementsByTagName('canvas');
-    for (var i = 0; i < canvases.length; i++) {
-      var k = canvases[i];
-      if (k.dataset.hidden === 'true') {
-        k.style.visibility = '';
-        delete k.dataset.hidden;
+    for (var i = 0; i < this._elements.length; i++) {
+      var element = this._elements[i];
+      if (element instanceof p5.Renderer) {
+        var k = element.elt;
+        if (k.dataset.hidden === 'true') {
+          k.style.visibility = '';
+          delete k.dataset.hidden;
+        }
       }
     }
+
     this._setupDone = true;
   }.bind(this);
 

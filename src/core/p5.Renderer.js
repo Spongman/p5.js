@@ -21,9 +21,24 @@ var constants = require('../core/constants');
  * @param {p5} [pInst] pointer to p5 instance
  * @param {Boolean} [isMainCanvas] whether we're using it as main canvas
  */
-p5.Renderer = function(elt, pInst, isMainCanvas) {
+p5.Renderer = function(elt, pInst, type, isMainCanvas) {
+  this._type = type;
+
+  var id = 0;
+  while (document.getElementById('defaultCanvas' + id)) id++;
+  elt.id = 'defaultCanvas' + id;
+
   p5.Element.call(this, elt, pInst);
   this.canvas = elt;
+
+  // set to invisible if still in setup (to prevent flashing with manipulate)
+  if (!pInst._setupDone) {
+    elt.dataset.hidden = true; // tag to show later
+    elt.style.visibility = 'hidden';
+  }
+
+  (pInst._userNode || document.body).appendChild(elt);
+
   if (isMainCanvas) {
     this._isMainCanvas = true;
     // for pixel method sharing with pimage
@@ -93,14 +108,16 @@ p5.Renderer.prototype.pop = function(style) {
   }
 };
 
+p5.Renderer.prototype.beginRedraw = function() {
+  this.resetMatrix();
+};
+
 /**
  * Resize our canvas element.
  */
 p5.Renderer.prototype.resize = function(w, h) {
   this.width = w;
   this.height = h;
-  this.elt.width = w * this._pInst._pixelDensity;
-  this.elt.height = h * this._pInst._pixelDensity;
   this.elt.style.width = w + 'px';
   this.elt.style.height = h + 'px';
   if (this._isMainCanvas) {
@@ -306,6 +323,15 @@ p5.Renderer.prototype._isOpenType = function(f) {
   return typeof f === 'object' && f.font && f.font.supported;
 };
 
+p5.Renderer.prototype._applyTextProperties = function() {
+  this._setProperty('_textAscent', null);
+  this._setProperty('_textDescent', null);
+
+  if (this._isOpenType()) {
+    this._setProperty('_textStyle', this._textFont.font.styleName);
+  }
+};
+
 p5.Renderer.prototype._updateTextMetrics = function() {
   if (this._isOpenType()) {
     this._setProperty('_textAscent', this._textFont._textAscent());
@@ -369,5 +395,26 @@ function calculateOffset(object) {
   }
   return [currentLeft, currentTop];
 }
+
+//////////////////////////////////////////////
+// SHAPE | Curves
+//////////////////////////////////////////////
+p5.Renderer.prototype.bezier = function(x1, y1, x2, y2, x3, y3, x4, y4) {
+  this._pInst.beginShape();
+  this._pInst.vertex(x1, y1);
+  this._pInst.bezierVertex(x2, y2, x3, y3, x4, y4);
+  this._pInst.endShape();
+  return this;
+};
+
+p5.Renderer.prototype.curve = function(x1, y1, x2, y2, x3, y3, x4, y4) {
+  this._pInst.beginShape();
+  this._pInst.curveVertex(x1, y1);
+  this._pInst.curveVertex(x2, y2);
+  this._pInst.curveVertex(x3, y3);
+  this._pInst.curveVertex(x4, y4);
+  this._pInst.endShape();
+  return this;
+};
 
 module.exports = p5.Renderer;

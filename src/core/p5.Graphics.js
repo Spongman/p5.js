@@ -24,12 +24,20 @@ var constants = require('./constants');
  * @param {p5} [pInst]          pointer to p5 instance
  */
 p5.Graphics = function(w, h, renderer, pInst) {
-  var r = renderer || constants.P2D;
+  switch (renderer) {
+    case constants.WEBGL:
+      this._renderer = new p5.RendererGL(this, false);
+      break;
+    case constants.SVG:
+      this._renderer = new p5.RendererSVG(this, false);
+      break;
+    case constants.P2D:
+    default:
+      this._renderer = new p5.Renderer2D(this, false);
+      break;
+  }
 
-  this.canvas = document.createElement('canvas');
-  var node = pInst._userNode || document.body;
-  node.appendChild(this.canvas);
-
+  this.canvas = this._renderer.elt;
   p5.Element.call(this, this.canvas, pInst, false);
 
   // bind methods and props of p5 to the new object
@@ -48,11 +56,6 @@ p5.Graphics = function(w, h, renderer, pInst) {
   this.height = h;
   this._pixelDensity = pInst._pixelDensity;
 
-  if (r === constants.WEBGL) {
-    this._renderer = new p5.RendererGL(this.canvas, this, false);
-  } else {
-    this._renderer = new p5.Renderer2D(this.canvas, this, false);
-  }
   pInst._elements.push(this);
 
   this._renderer.resize(w, h);
