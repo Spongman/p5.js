@@ -9,7 +9,7 @@ var p5 = require('./main');
 var constants = require('./constants');
 
 if (typeof IS_MINIFIED !== 'undefined') {
-  p5._validateParameters = p5._friendlyFileLoadError = function() {};
+  p5._friendlyFileLoadError = function() {};
 } else {
   var doFriendlyWelcome = false; // TEMP until we get it all working LM
   // for parameter validation
@@ -145,7 +145,6 @@ if (typeof IS_MINIFIED !== 'undefined') {
     report(message, errorInfo.method, FILE_LOAD);
   };
 
-  var docCache = {};
   var builtinTypes = [
     'null',
     'number',
@@ -294,6 +293,7 @@ if (typeof IS_MINIFIED !== 'undefined') {
       });
     });
     return {
+      name: func,
       overloads: overloads,
       maxParams: maxParams
     };
@@ -464,7 +464,7 @@ if (typeof IS_MINIFIED !== 'undefined') {
   })('ValidationError');
 
   // function for generating console.log() msg
-  p5._friendlyParamError = function(errorObj, func) {
+  var friendlyParamError = function(errorObj, func) {
     var message;
 
     function formatType() {
@@ -556,13 +556,13 @@ if (typeof IS_MINIFIED !== 'undefined') {
    *  "ellipse was expecting a number for parameter #1,
    *           received "foo" instead."
    */
-  p5._validateParameters = function validateParameters(func, args) {
+  var validateParameters = function(docData, args) {
     if (p5.disableFriendlyErrors) {
       return; // skip FES
     }
 
-    // lookup the docs in the 'data.json' file
-    var docs = docCache[func] || (docCache[func] = lookupParamDoc(func));
+    var func = docData.name;
+    var docs = docData.docs || (docData.docs = parseParamDoc(docData));
     var overloads = docs.overloads;
 
     // ignore any trailing `undefined` arguments
@@ -623,8 +623,6 @@ if (typeof IS_MINIFIED !== 'undefined') {
     report(str, 'print', '#C83C00'); // auto dark orange
     report(str, 'print', '#4DB200'); // auto dark green
   } */
-
-  p5.prototype._validateParameters = p5.validateParameters;
 }
 
 // This is a lazily-defined list of p5 symbols that may be

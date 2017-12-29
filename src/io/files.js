@@ -117,7 +117,6 @@ require('../core/error_helpers');
  * @return {Object|Array}
  */
 p5.prototype.loadJSON = function() {
-  p5._validateParameters('loadJSON', arguments);
   var path = arguments[0];
   var callback;
   var errorCallback;
@@ -228,8 +227,6 @@ p5.prototype.loadJSON = function() {
  *
  */
 p5.prototype.loadStrings = function() {
-  p5._validateParameters('loadStrings', arguments);
-
   var ret = [];
   var callback, errorCallback;
 
@@ -823,8 +820,6 @@ p5.prototype.loadBytes = function(file, callback, errorCallback) {
  * @return {Promise}
  */
 p5.prototype.httpGet = function() {
-  p5._validateParameters('httpGet', arguments);
-
   var args = Array.prototype.slice.call(arguments);
   args.splice(1, 0, 'GET');
   return p5.prototype.httpDo.apply(this, args);
@@ -928,8 +923,6 @@ p5.prototype.httpGet = function() {
  * @return {Promise}
  */
 p5.prototype.httpPost = function() {
-  p5._validateParameters('httpPost', arguments);
-
   var args = Array.prototype.slice.call(arguments);
   args.splice(1, 0, 'POST');
   return p5.prototype.httpDo.apply(this, args);
@@ -1520,7 +1513,6 @@ p5.prototype.save = function(object, _filename, _options) {
  *
  */
 p5.prototype.saveJSON = function(json, filename, opt) {
-  p5._validateParameters('saveJSON', arguments);
   var stringify;
   if (opt) {
     stringify = JSON.stringify(json);
@@ -1568,7 +1560,6 @@ p5.prototype.saveJSONArray = p5.prototype.saveJSON;
  *
  */
 p5.prototype.saveStrings = function(list, filename, extension) {
-  p5._validateParameters('saveStrings', arguments);
   var ext = extension || 'txt';
   var pWriter = this.createWriter(filename, ext);
   for (var i = 0; i < list.length; i++) {
@@ -1636,7 +1627,6 @@ function escapeHelper(content) {
  *
  */
 p5.prototype.saveTable = function(table, filename, options) {
-  p5._validateParameters('saveTable', arguments);
   var ext;
   if (options === undefined) {
     ext = filename.substring(filename.lastIndexOf('.') + 1, filename.length);
