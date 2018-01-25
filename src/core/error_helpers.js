@@ -309,6 +309,11 @@ if (typeof IS_MINIFIED !== 'undefined') {
   };
 
   var testParamType = function(param, type) {
+    function isNumber() {
+      if (typeof param === 'number') return true;
+      if (typeof param === 'string') return !isNaN(param);
+      return false;
+    }
     var isArray = param instanceof Array;
     var matches = true;
     if (type.array && isArray) {
