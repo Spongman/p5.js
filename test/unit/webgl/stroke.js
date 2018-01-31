@@ -20,6 +20,7 @@ suite('stroke WebGL', function() {
   suite('default stroke shader', function() {
     test('check default shader creation', function(done) {
       myp5.createCanvas(100, 100, myp5.WEBGL);
+<<<<<<< HEAD
       assert(
         myp5._renderer._getRetainedStrokeShader() ===
           myp5._renderer._getLineShader(),
@@ -30,6 +31,8 @@ suite('stroke WebGL', function() {
           myp5._renderer._getColorShader(),
         'default fill shader was not initialized with GL canvas'
       );
+=======
+>>>>>>> fix webgl tests
       done();
     });
 
