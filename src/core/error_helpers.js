@@ -600,6 +600,74 @@ if (typeof IS_MINIFIED !== 'undefined') {
     }
   };
 
+  var _validationInitialized = false;
+  p5._initializeParameterValidation = function() {
+    if (_validationInitialized) {
+      return;
+    }
+    _validationInitialized = true;
+    var nestedValidation = false;
+    var classitems = arrDoc.classitems;
+    var typeMap = {};
+    for (var i = 0; i < classitems.length; i++) {
+      var classitem = classitems[i];
+      var typeName = classitem.class;
+      if (classitem.module === 'p5.sound' || typeName === 'p5.RendererGL') {
+        continue; // not ready yet
+      }
+      if (typeName === 'p5.dom') {
+        typeName = 'p5';
+      }
+
+      if (
+        classitem.itemtype !== 'method' ||
+        classitem.private ||
+        (typeName === 'p5' && skipValidation.indexOf(classitem.name) >= 0)
+      ) {
+        continue;
+      }
+      var type;
+      if (typeMap.hasOwnProperty(typeName)) {
+        type = typeMap[typeName];
+      } else {
+        var t = null;
+        var parts = typeName.split('.');
+        if (parts[0] === 'p5') {
+          t = p5;
+          for (var ip = 1; t && ip < parts.length; ip++) t = t[parts[ip]];
+        }
+        type = typeMap[typeName] = t || null;
+      }
+
+      if (!type) {
+        continue;
+      }
+      var pr = classitem.static ? type : type.prototype;
+      var fn = pr[classitem.name];
+      if (typeof fn === 'function') {
+        var proxy = (function(fn, vp, classitem) {
+          return function validatingProxy() {
+            if (nestedValidation) {
+              return fn.apply(this, arguments);
+            }
+
+            nestedValidation = true;
+            try {
+              vp(classitem, arguments);
+              return fn.apply(this, arguments);
+            } finally {
+              nestedValidation = false;
+            }
+          };
+        })(fn, validateParameters, classitem);
+        if (window[classitem.name] === pr[classitem.name]) {
+          window[classitem.name] = proxy;
+        }
+        pr[classitem.name] = proxy;
+      }
+    }
+  };
+
   /**
    * Prints out all the colors in the color pallete with white text.
    * For color blindness testing.
