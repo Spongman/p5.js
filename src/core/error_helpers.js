@@ -600,6 +600,14 @@ if (typeof IS_MINIFIED !== 'undefined') {
     }
   };
 
+  var skipValidation = [
+    'httpDo',
+    'createCapture',
+    'loadJSON',
+    'loadTable',
+    'redraw'
+  ];
+
   var _validationInitialized = false;
   p5._initializeParameterValidation = function() {
     if (_validationInitialized) {
