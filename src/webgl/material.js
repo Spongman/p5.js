@@ -177,7 +177,7 @@ p5.RendererGL.prototype.shader = function(s) {
     this.curStrokeShader = s;
   } else {
     this.curFillShader = s;
-    this._enableNormal = false;
+    this._useNormalMaterial = false;
   }
 };
 
@@ -215,7 +215,7 @@ p5.prototype.normalMaterial = function() {
 
 p5.RendererGL.prototype.normalMaterial = function() {
   this.drawMode = constants.FILL;
-  this._enableNormal = true;
+  this._useNormalMaterial = true;
 };
 
 /**
@@ -305,7 +305,7 @@ p5.prototype.texture = function() {
 
 p5.RendererGL.prototype.texture = function(tex) {
   this.drawMode = constants.TEXTURE;
-  this._enableNormal = false;
+  this._useNormalMaterial = false;
   this._tex = tex;
 };
 
@@ -355,7 +355,7 @@ p5.prototype.ambientMaterial = function() {
 p5.RendererGL.prototype.ambientMaterial = function(v1, v2, v3, a) {
   var color = p5.prototype.color.apply(this._pInst, arguments);
   this._ambientColor = color._array;
-  this._enableNormal = false;
+  this._useNormalMaterial = false;
   this._tex = null;
 };
 
@@ -405,7 +405,7 @@ p5.prototype.specularMaterial = function() {
 p5.RendererGL.prototype.specularMaterial = function(v1, v2, v3, a) {
   var color = p5.prototype.color.apply(this._pInst, arguments);
   this._specularColor = color._array;
-  this._enableNormal = false;
+  this._useNormalMaterial = false;
   this._tex = null;
 };
 
