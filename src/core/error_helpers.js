@@ -309,11 +309,6 @@ if (typeof IS_MINIFIED !== 'undefined') {
   };
 
   var testParamType = function(param, type) {
-    function isNumber() {
-      if (typeof param === 'number') return true;
-      if (typeof param === 'string') return !isNaN(param);
-      return false;
-    }
     var isArray = param instanceof Array;
     var matches = true;
     if (type.array && isArray) {
@@ -496,7 +491,9 @@ if (typeof IS_MINIFIED !== 'undefined') {
         var argType =
           arg instanceof Array
             ? 'array'
-            : arg === null ? 'null' : arg.name || typeof arg;
+            : arg === null
+              ? 'null'
+              : arg.name || typeof arg;
         message =
           func +
           '() was expecting ' +
