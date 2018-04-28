@@ -248,6 +248,7 @@ p5.RendererGL.prototype._renderStroke = function(geometry, stroke) {
   gl.drawArrays(gl.TRIANGLES, 0, geometry.lineVertexCount);
 
   stroke.unbindShader();
+
   this._pInst._pixelsDirty = true;
 };
 
