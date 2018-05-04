@@ -160,16 +160,16 @@ if (typeof IS_MINIFIED !== 'undefined') {
   // validateParameters() helper functions:
   // lookupParamDoc() for querying data.json
   var lookupParamDoc = function(func) {
+    // look for the docs in the `data.json` datastructure
     var ichDot = func.lastIndexOf('.');
     var funcName = func.substr(ichDot + 1);
     var funcClass = func.substr(0, ichDot) || 'p5';
-    // look for the docs in the `data.json` datastructure
     var queryResult;
     var classitems = arrDoc.classitems;
     for (var ici = 0; ici < classitems.length; ici++) {
-      var x = classitems[ici];
-      if (x.name === funcName && x.class === funcClass) {
-        queryResult = x;
+      var ci = classitems[ici];
+      if (ci.name === funcName && ci.class === funcClass) {
+        queryResult = ci;
         break;
       }
     }
