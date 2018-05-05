@@ -447,9 +447,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-http');
+  //grunt.loadNpmTasks('grunt-http');
   grunt.loadNpmTasks('grunt-minjson');
-  grunt.loadNpmTasks('grunt-mocha');
+  //grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-release-it');
@@ -479,7 +479,7 @@ module.exports = function(grunt) {
     'build',
     'connect',
     'mochaChrome',
-    'mocha',
+    //'mocha',
     'mochaTest'
   ]);
   grunt.registerTask('test:nobuild', ['eslint:test', 'connect', 'mocha']);
