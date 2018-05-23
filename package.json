@@ -97,6 +97,7 @@
     "postinstall-prepare": "^1.0.1",
     "prettier": "^1.7.4",
     "request": "^2.81.0",
+    "uglifyify": "^5.0.0",
     "whatwg-fetch": "^2.0.3",
     "word-wrap": "^1.2.3"
   },

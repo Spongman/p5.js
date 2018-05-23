@@ -33,6 +33,11 @@ module.exports = function(grunt) {
 
       if (isMin) {
         browseified = browseified.exclude('../../docs/reference/data.json');
+      } else {
+        browseified.transform('uglifyify', {
+          global: true,
+          ignore: ['!**/opentype.js']
+        });
       }
 
       var bundle = browseified.transform('brfs').bundle();

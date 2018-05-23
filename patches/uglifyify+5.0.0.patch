@@ -1,0 +1,12 @@
+patch-package
+--- a/node_modules/uglifyify/index.js
++++ b/node_modules/uglifyify/index.js
+@@ -16,6 +16,8 @@ function uglifyify(file, opts) {
+     return through()
+   }
+ 
++  delete opts.ignore;
++
+   var buffer = ''
+   var exts = []
+     .concat(opts.exts || [])
