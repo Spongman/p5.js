@@ -29,11 +29,11 @@ suite('p5.Color', function() {
     });
 
     test("shouldn't set HSBA property before hsb access func is called", function() {
-      assert.equal(c.hsba, undefined);
+      assert.equal(c.hsba, void 0);
     });
 
     test("shouldn't set HSLA property before hsb access func is called", function() {
-      assert.equal(c.hsla, undefined);
+      assert.equal(c.hsla, void 0);
     });
 
     test('color(): missing param #0 + throws error', function() {

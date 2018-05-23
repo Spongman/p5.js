@@ -288,12 +288,12 @@ p5.prototype.ortho = function() {
 };
 
 p5.RendererGL.prototype.ortho = function(left, right, bottom, top, near, far) {
-  if (left === undefined) left = -this.width / 2;
-  if (right === undefined) right = +this.width / 2;
-  if (bottom === undefined) bottom = -this.height / 2;
-  if (top === undefined) top = +this.height / 2;
-  if (near === undefined) near = 0;
-  if (far === undefined) far = Math.max(this.width, this.height);
+  if (typeof left === 'undefined') left = -this.width / 2;
+  if (typeof right === 'undefined') right = +this.width / 2;
+  if (typeof bottom === 'undefined') bottom = -this.height / 2;
+  if (typeof top === 'undefined') top = +this.height / 2;
+  if (typeof near === 'undefined') near = 0;
+  if (typeof far === 'undefined') far = Math.max(this.width, this.height);
 
   var w = right - left;
   var h = top - bottom;

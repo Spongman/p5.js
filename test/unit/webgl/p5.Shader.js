@@ -25,7 +25,7 @@ suite('p5.Shader', function() {
     for (var i = 0; i < expectedUniforms.length; i++) {
       var uniform = uniforms[expectedUniforms[i]];
       assert(
-        uniform !== undefined,
+        typeof uniform !== 'undefined',
         shaderName + ' missing expectedUniform: ' + expectedUniforms[i]
       );
     }
@@ -40,7 +40,7 @@ suite('p5.Shader', function() {
     for (var i = 0; i < expectedAttributes.length; i++) {
       var attribute = attributes[expectedAttributes[i]];
       assert(
-        attribute !== undefined,
+        typeof attribute !== 'undefined',
         shaderName + ' missing expected attribute: ' + expectedAttributes[i]
       );
     }
@@ -83,14 +83,14 @@ suite('p5.Shader', function() {
       */
       assert(
         myp5._renderer.curFillShader !== null &&
-          myp5._renderer.curFillShader !== undefined,
+          typeof myp5._renderer.curFillShader !== 'undefined',
         'Shader is not in use or has not been cached'
       );
     });
     test('Uniform Cache', function() {
       var uniforms = myp5._renderer.curFillShader.uniforms;
       assert(
-        uniforms !== null && uniforms !== undefined,
+        uniforms !== null && typeof uniforms !== 'undefined',
         'Shader uniforms have not been cached'
       );
 

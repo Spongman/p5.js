@@ -18,7 +18,7 @@ var p5 = require('../core/core');
  * @property {Constant} deviceOrientation
  * @readOnly
  */
-p5.prototype.deviceOrientation = undefined;
+p5.prototype.deviceOrientation = void 0;
 
 /**
  * The system variable accelerationX always contains the acceleration of the
@@ -342,7 +342,7 @@ p5.prototype._updatePRotations = function() {
  * @property {String} turnAxis
  * @readOnly
  */
-p5.prototype.turnAxis = undefined;
+p5.prototype.turnAxis = void 0;
 
 var move_threshold = 0.5;
 var shake_threshold = 30;
@@ -573,7 +573,7 @@ p5.prototype._handleMotion = function() {
     this._setProperty('deviceOrientation', 'landscape');
   } else if (window.orientation === 0) {
     this._setProperty('deviceOrientation', 'portrait');
-  } else if (window.orientation === undefined) {
+  } else if (typeof window.orientation === 'undefined') {
     this._setProperty('deviceOrientation', 'undefined');
   }
   var deviceMoved = this.deviceMoved || window.deviceMoved;
@@ -657,7 +657,7 @@ p5.prototype._handleMotion = function() {
       deviceTurned();
     }
     pRotateDirectionZ = rotateDirectionZ;
-    this._setProperty('turnAxis', undefined);
+    this._setProperty('turnAxis');
   }
   var deviceShaken = this.deviceShaken || window.deviceShaken;
   if (typeof deviceShaken === 'function') {

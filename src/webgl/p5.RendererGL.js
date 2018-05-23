@@ -48,19 +48,24 @@ p5.RendererGL = function(elt, pInst, isMainCanvas, attr) {
   p5.Renderer.call(this, elt, pInst, isMainCanvas);
   this.attributes = {};
   attr = attr || {};
-  this.attributes.alpha = attr.alpha === undefined ? true : attr.alpha;
-  this.attributes.depth = attr.depth === undefined ? true : attr.depth;
-  this.attributes.stencil = attr.stencil === undefined ? true : attr.stencil;
+  this.attributes.alpha = typeof attr.alpha === 'undefined' ? true : attr.alpha;
+  this.attributes.depth = typeof attr.depth === 'undefined' ? true : attr.depth;
+  this.attributes.stencil =
+    typeof attr.stencil === 'undefined' ? true : attr.stencil;
   this.attributes.antialias =
-    attr.antialias === undefined ? false : attr.antialias;
+    typeof attr.antialias === 'undefined' ? false : attr.antialias;
   this.attributes.premultipliedAlpha =
-    attr.premultipliedAlpha === undefined ? false : attr.premultipliedAlpha;
+    typeof attr.premultipliedAlpha === 'undefined'
+      ? false
+      : attr.premultipliedAlpha;
   this.attributes.preserveDrawingBuffer =
-    attr.preserveDrawingBuffer === undefined
+    typeof attr.preserveDrawingBuffer === 'undefined'
       ? true
       : attr.preserveDrawingBuffer;
   this.attributes.perPixelLighting =
-    attr.perPixelLighting === undefined ? false : attr.perPixelLighting;
+    typeof attr.perPixelLighting === 'undefined'
+      ? false
+      : attr.perPixelLighting;
   this._initContext();
   this.isP3D = true; //lets us know we're in 3d mode
   this.GL = this.drawingContext;
@@ -99,13 +104,13 @@ p5.RendererGL = function(elt, pInst, isMainCanvas, attr) {
   //Geometry & Material hashes
   this.gHash = {};
 
-  this._defaultLightShader = undefined;
-  this._defaultImmediateModeShader = undefined;
-  this._defaultNormalShader = undefined;
-  this._defaultColorShader = undefined;
+  this._defaultLightShader = null;
+  this._defaultImmediateModeShader = null;
+  this._defaultNormalShader = null;
+  this._defaultColorShader = null;
 
-  this.curFillShader = undefined;
-  this.curStrokeShader = undefined;
+  this.curFillShader = null;
+  this.curStrokeShader = null;
 
   this._useColorShader();
   this.setStrokeShader(this._getLineShader());
@@ -648,7 +653,7 @@ p5.RendererGL.prototype.loadPixels = function() {
 //////////////////////////////////////////////
 
 p5.RendererGL.prototype.geometryInHash = function(gId) {
-  return this.gHash[gId] !== undefined;
+  return this.gHash[gId];
 };
 
 /**
@@ -975,7 +980,7 @@ p5.RendererGL.prototype._bindBuffer = function(
   usage
 ) {
   this.GL.bindBuffer(target, buffer);
-  if (values !== undefined) {
+  if (typeof values !== 'undefined') {
     var data = new type(values);
     this.GL.bufferData(target, data, usage);
   }
@@ -1025,7 +1030,7 @@ p5.RendererGL.prototype._flatten = function(arr) {
       } else {
         result.push(node);
       }
-    } while (nodes.length && (node = nodes.pop()) !== undefined);
+    } while (nodes.length && typeof (node = nodes.pop()) !== 'undefined');
     result.reverse(); // we reverse result to restore the original order
     return result;
   } else {

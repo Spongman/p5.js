@@ -356,7 +356,7 @@ p5.Matrix.prototype.transpose3x3 = function(mat3) {
  * @todo  finish implementation
  */
 p5.Matrix.prototype.inverseTranspose = function(matrix) {
-  if (this.mat3 === undefined) {
+  if (typeof this.mat3 === 'undefined') {
     console.error('sorry, this function only works with mat3');
   } else {
     //convert mat4 -> mat3

@@ -88,7 +88,7 @@ p5.Renderer.prototype.push = function() {
 function assign(to, firstSource) {
   for (var i = 1; i < arguments.length; i++) {
     var nextSource = arguments[i];
-    if (nextSource === undefined || nextSource === null) {
+    if (typeof nextSource === 'undefined' || nextSource === null) {
       continue;
     }
 

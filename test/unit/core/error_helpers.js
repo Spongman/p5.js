@@ -32,33 +32,17 @@ suite('Error Helpers', function() {
     });
     test('arc(): missing param #0', function() {
       assert.validationError(function() {
-        p5._validateParameters('arc', [
-          undefined,
-          1,
-          10.5,
-          10,
-          0,
-          Math.PI,
-          'pie'
-        ]);
+        p5._validateParameters('arc', [void 0, 1, 10.5, 10, 0, Math.PI, 'pie']);
       });
     });
     test('arc(): missing param #4', function() {
       assert.validationError(function() {
-        p5._validateParameters('arc', [
-          1,
-          1,
-          10.5,
-          10,
-          undefined,
-          Math.PI,
-          'pie'
-        ]);
+        p5._validateParameters('arc', [1, 1, 10.5, 10, void 0, Math.PI, 'pie']);
       });
     });
     test('arc(): missing param #5', function() {
       assert.validationError(function() {
-        p5._validateParameters('arc', [1, 1, 10.5, 10, 0, undefined, 'pie']);
+        p5._validateParameters('arc', [1, 1, 10.5, 10, 0, void 0, 'pie']);
       });
     });
     test('arc(): missing param #6, no friendly-err-msg', function() {

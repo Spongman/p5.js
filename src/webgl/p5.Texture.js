@@ -25,7 +25,7 @@ p5.Texture = function(renderer, obj) {
   var gl = this._renderer.GL;
 
   this.src = obj;
-  this.glTex = undefined;
+  this.glTex = null;
   this.glTarget = gl.TEXTURE_2D;
   this.glFormat = gl.RGBA;
   this.mipmaps = false;

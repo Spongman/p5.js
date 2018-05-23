@@ -261,7 +261,7 @@ p5.prototype.unchar = function(n) {
  * @return {String[]}      hexadecimal string representation of values
  */
 p5.prototype.hex = function(n, digits) {
-  digits = digits === undefined || digits === null ? (digits = 8) : digits;
+  digits = digits == null ? (digits = 8) : digits;
   if (n instanceof Array) {
     return n.map(function(n) {
       return p5.prototype.hex(n, digits);

@@ -278,7 +278,9 @@ function mod(yuidocs, localFileame, globalFilename, sourcePath) {
     var params = (overload.params || []).map(translateParam);
     var returnType = overload.chainable
       ? className
-      : overload.return ? translateType(overload.return.type, 'any') : 'void';
+      : overload.return
+        ? translateType(overload.return.type, 'any')
+        : 'void';
     var decl;
 
     if (classitem.is_constructor) {

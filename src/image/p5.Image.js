@@ -593,7 +593,7 @@ p5.Image.prototype.copy = function() {
 //       moment this method does not match native processings original
 //       functionality exactly.
 p5.Image.prototype.mask = function(p5Image) {
-  if (p5Image === undefined) {
+  if (typeof p5Image === 'undefined') {
     p5Image = this;
   }
   var currBlend = this.drawingContext.globalCompositeOperation;

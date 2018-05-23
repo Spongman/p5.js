@@ -74,7 +74,7 @@ suite('p5.Vector', function() {
 
   suite('new p5.Vector(1,2,undefined)', function() {
     setup(function() {
-      v = new p5.Vector(1, 2, undefined);
+      v = new p5.Vector(1, 2, void 0);
     });
 
     test('should have x, y, z be initialized to 1,2,0', function() {
@@ -442,7 +442,7 @@ suite('p5.Vector', function() {
       });
 
       test('should not be undefined', function() {
-        expect(res).to.not.eql(undefined);
+        expect(res).to.not.eql(void 0);
       });
 
       test('should return a new p5.Vector', function() {
@@ -532,7 +532,7 @@ suite('p5.Vector', function() {
       });
 
       test('should not be undefined', function() {
-        expect(res).to.not.eql(undefined);
+        expect(res).to.not.eql(void 0);
       });
 
       test('should return neither v1 nor v2', function() {
@@ -798,7 +798,7 @@ suite('p5.Vector', function() {
     });
 
     test('should not be undefined', function() {
-      expect(res).to.not.eql(undefined);
+      expect(res).to.not.eql(void 0);
     });
 
     test('should be a p5.Vector', function() {

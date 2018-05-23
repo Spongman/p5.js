@@ -170,7 +170,7 @@ Filters.apply = function(canvas, func, filterParam) {
 Filters.threshold = function(canvas, level) {
   var pixels = Filters._toPixels(canvas);
 
-  if (level === undefined) {
+  if (typeof level === 'undefined') {
     level = 0.5;
   }
   var thresh = Math.floor(level * 255);

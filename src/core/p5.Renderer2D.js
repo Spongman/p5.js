@@ -25,7 +25,8 @@ p5.Renderer2D = function(elt, pInst, isMainCanvas) {
 p5.Renderer2D.prototype = Object.create(p5.Renderer.prototype);
 
 p5.Renderer2D.prototype._applyDefaults = function() {
-  this._cachedFillStyle = this._cachedStrokeStyle = undefined;
+  delete this._cachedFillStyle;
+  delete this._cachedStrokeStyle;
   this._setFill(constants._DEFAULT_FILL);
   this._setStroke(constants._DEFAULT_STROKE);
   this.drawingContext.lineCap = constants.ROUND;
@@ -234,16 +235,16 @@ p5.Renderer2D._copyHelper = function(
 
 p5.Renderer2D.prototype.get = function(x, y, w, h) {
   if (
-    x === undefined &&
-    y === undefined &&
-    w === undefined &&
-    h === undefined
+    typeof x === 'undefined' &&
+    typeof y === 'undefined' &&
+    typeof w === 'undefined' &&
+    typeof h === 'undefined'
   ) {
     x = 0;
     y = 0;
     w = this.width;
     h = this.height;
-  } else if (w === undefined && h === undefined) {
+  } else if (typeof w === 'undefined' && typeof h === 'undefined') {
     w = 1;
     h = 1;
   }
@@ -372,10 +373,10 @@ p5.Renderer2D.prototype.updatePixels = function(x, y, w, h) {
   var ctx = this._pInst || this;
   var pd = ctx._pixelDensity;
   if (
-    x === undefined &&
-    y === undefined &&
-    w === undefined &&
-    h === undefined
+    typeof x === 'undefined' &&
+    typeof y === 'undefined' &&
+    typeof w === 'undefined' &&
+    typeof h === 'undefined'
   ) {
     x = 0;
     y = 0;

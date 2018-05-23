@@ -1504,7 +1504,7 @@ p5.prototype.saveJSON = function(json, filename, opt) {
   if (opt) {
     stringify = JSON.stringify(json);
   } else {
-    stringify = JSON.stringify(json, undefined, 2);
+    stringify = JSON.stringify(json, null, 2);
   }
   this.saveStrings(stringify.split('\n'), filename, 'json');
 };
@@ -1617,7 +1617,7 @@ function escapeHelper(content) {
 p5.prototype.saveTable = function(table, filename, options) {
   p5._validateParameters('saveTable', arguments);
   var ext;
-  if (options === undefined) {
+  if (typeof options === 'undefined') {
     ext = filename.substring(filename.lastIndexOf('.') + 1, filename.length);
   } else {
     ext = options;

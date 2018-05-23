@@ -224,7 +224,7 @@ p5.Shader.prototype.bindTextures = function() {
   for (var i = 0; i < this.samplers.length; i++) {
     var uniform = this.samplers[i];
     var tex = uniform.texture;
-    if (tex === undefined) {
+    if (!tex) {
       // user hasn't yet supplied a texture for this slot.
       // (or there may not be one--maybe just lighting),
       // so we supply a default texture instead.
@@ -276,7 +276,7 @@ p5.Shader.prototype.useProgram = function() {
  * @chainable
  * @param {String} uniformName the name of the uniform in the
  * shader program
- * @param {Object|Number|Boolean|Number[]} data the data to be associated
+ * @param {Object|Number|Boolean|Number[]|p5.Vector} data the data to be associated
  * with that uniform; type varies (could be a single numerical value, array,
  * matrix, or texture / sampler reference)
  */
@@ -328,6 +328,8 @@ p5.Shader.prototype.setUniform = function(uniformName, data) {
     case gl.FLOAT_VEC2:
       if (uniform.size > 1) {
         data.length && gl.uniform2fv(location, data);
+      } else if (data instanceof p5.Vector) {
+        gl.uniform2f(location, data.x, data.y);
       } else {
         gl.uniform2f(location, data[0], data[1]);
       }
@@ -335,6 +337,8 @@ p5.Shader.prototype.setUniform = function(uniformName, data) {
     case gl.FLOAT_VEC3:
       if (uniform.size > 1) {
         data.length && gl.uniform3fv(location, data);
+      } else if (data instanceof p5.Vector) {
+        gl.uniform2f(location, data.x, data.y, data.z);
       } else {
         gl.uniform3f(location, data[0], data[1], data[2]);
       }
@@ -368,16 +372,16 @@ p5.Shader.prototype.setUniform = function(uniformName, data) {
 
 p5.Shader.prototype.isLightShader = function() {
   return (
-    this.uniforms.uUseLighting !== undefined ||
-    this.uniforms.uAmbientLightCount !== undefined ||
-    this.uniforms.uDirectionalLightCount !== undefined ||
-    this.uniforms.uPointLightCount !== undefined ||
-    this.uniforms.uAmbientColor !== undefined ||
-    this.uniforms.uDirectionalColor !== undefined ||
-    this.uniforms.uPointLightLocation !== undefined ||
-    this.uniforms.uPointLightColor !== undefined ||
-    this.uniforms.uLightingDirection !== undefined ||
-    this.uniforms.uSpecular !== undefined
+    this.uniforms.uUseLighting ||
+    this.uniforms.uAmbientLightCount ||
+    this.uniforms.uDirectionalLightCount ||
+    this.uniforms.uPointLightCount ||
+    this.uniforms.uAmbientColor ||
+    this.uniforms.uDirectionalColor ||
+    this.uniforms.uPointLightLocation ||
+    this.uniforms.uPointLightColor ||
+    this.uniforms.uLightingDirection ||
+    this.uniforms.uSpecular
   );
 };
 
@@ -386,10 +390,7 @@ p5.Shader.prototype.isTextureShader = function() {
 };
 
 p5.Shader.prototype.isColorShader = function() {
-  return (
-    this.attributes.aVertexColor !== undefined ||
-    this.uniforms.uMaterialColor !== undefined
-  );
+  return this.attributes.aVertexColor || this.uniforms.uMaterialColor;
 };
 
 p5.Shader.prototype.isTexLightShader = function() {
@@ -397,7 +398,7 @@ p5.Shader.prototype.isTexLightShader = function() {
 };
 
 p5.Shader.prototype.isStrokeShader = function() {
-  return this.uniforms.uStrokeWeight !== undefined;
+  return this.uniforms.uStrokeWeight;
 };
 
 /**

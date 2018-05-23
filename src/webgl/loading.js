@@ -169,7 +169,7 @@ function parseObj(model, lines) {
             // previous nth vertex. I haven't seen this used in practice, but
             // it might be good to implement this in the future.
 
-            if (indexedVerts[vertString] !== undefined) {
+            if (typeof indexedVerts[vertString] !== 'undefined') {
               vertIndex = indexedVerts[vertString];
             } else {
               var vertParts = vertString.split('/');

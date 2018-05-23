@@ -386,7 +386,7 @@ p5.prototype._onresize = function(e) {
   var executeDefault;
   if (typeof context.windowResized === 'function') {
     executeDefault = context.windowResized(e);
-    if (executeDefault !== undefined && !executeDefault) {
+    if (typeof executeDefault !== 'undefined' && !executeDefault) {
       e.preventDefault();
     }
   }

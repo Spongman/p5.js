@@ -39,7 +39,7 @@ var constants = require('./constants');
 var p5 = function(sketch, node, sync) {
   if (typeof node === 'boolean' && typeof sync === 'undefined') {
     sync = node;
-    node = undefined;
+    node = void 0;
   }
 
   //////////////////////////////////////////////
@@ -473,7 +473,7 @@ var p5 = function(sketch, node, sync) {
         try {
           delete window[p];
         } catch (x) {
-          window[p] = undefined;
+          window[p] = void 0;
         }
       }
       for (var p2 in this) {
@@ -481,7 +481,7 @@ var p5 = function(sketch, node, sync) {
           try {
             delete window[p2];
           } catch (x) {
-            window[p2] = undefined;
+            window[p2] = void 0;
           }
         }
       }

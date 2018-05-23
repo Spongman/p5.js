@@ -33,10 +33,10 @@ var constants = require('../core/constants');
 p5.RendererGL.prototype.beginShape = function(mode) {
   //default shape mode is line_strip
   this.immediateMode.shapeMode =
-    mode !== undefined ? mode : constants.LINE_STRIP;
+    typeof mode !== 'undefined' ? mode : constants.LINE_STRIP;
   //if we haven't yet initialized our
   //immediateMode vertices & buffers, create them now!
-  if (this.immediateMode.vertices === undefined) {
+  if (!this.immediateMode.vertices) {
     this.immediateMode.vertices = [];
     this.immediateMode.edges = [];
     this.immediateMode.lineVertices = [];

@@ -32,7 +32,7 @@ p5.Font = function(p) {
    * Underlying opentype font implementation
    * @property font
    */
-  this.font = undefined;
+  this.font = null;
 };
 
 p5.Font.prototype.list = function() {
@@ -83,8 +83,8 @@ p5.Font.prototype.list = function() {
  *
  */
 p5.Font.prototype.textBounds = function(str, x, y, fontSize, options) {
-  x = x !== undefined ? x : 0;
-  y = y !== undefined ? y : 0;
+  x = typeof x !== 'undefined' ? x : 0;
+  y = typeof y !== 'undefined' ? y : 0;
   fontSize = fontSize || this.parent._renderer._textSize;
 
   // Check cache for existing bounds. Take into consideration the text alignment
@@ -450,7 +450,9 @@ p5.Font.prototype._handleAlignment = function(p, ctx, line, x, y, textWidth) {
     textDescent = this._textDescent(fontSize);
 
   textWidth =
-    textWidth !== undefined ? textWidth : this._textWidth(line, fontSize);
+    typeof textWidth !== 'undefined'
+      ? textWidth
+      : this._textWidth(line, fontSize);
 
   if (ctx.textAlign === constants.CENTER) {
     x -= textWidth / 2;

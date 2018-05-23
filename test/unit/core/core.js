@@ -19,7 +19,7 @@ suite('Core', function() {
     // right thing during page load.
 
     var myp5 = new p5(function() {}, null, true);
-    var isDrawingContextDefined = myp5.drawingContext !== undefined;
+    var isDrawingContextDefined = typeof myp5.drawingContext !== 'undefined';
 
     test('should define drawContext synchronously', function() {
       assert.ok(isDrawingContextDefined);
@@ -28,7 +28,7 @@ suite('Core', function() {
 
   suite('new p5(sketch, null, false)', function() {
     var myp5 = new p5(function() {}, null, false);
-    var isDrawingContextDefined = myp5.drawingContext !== undefined;
+    var isDrawingContextDefined = typeof myp5.drawingContext !== 'undefined';
 
     test('should define drawContext asynchronously', function() {
       assert.equal(isDrawingContextDefined, false);
@@ -38,7 +38,7 @@ suite('Core', function() {
 
   suite('new p5(sketch, node, true)', function() {
     var myp5 = new p5(function() {}, node, true);
-    var isDrawingContextDefined = myp5.drawingContext !== undefined;
+    var isDrawingContextDefined = typeof myp5.drawingContext !== 'undefined';
 
     test('should define drawContext synchronously', function() {
       assert.ok(isDrawingContextDefined);
@@ -47,7 +47,7 @@ suite('Core', function() {
 
   suite('new p5(sketch, node)', function() {
     var myp5 = new p5(function() {}, node);
-    var isDrawingContextDefined = myp5.drawingContext !== undefined;
+    var isDrawingContextDefined = typeof myp5.drawingContext !== 'undefined';
 
     test('should define drawContext asynchronously', function() {
       assert.equal(isDrawingContextDefined, false);
@@ -57,7 +57,7 @@ suite('Core', function() {
 
   suite('new p5(sketch, true)', function() {
     var myp5 = new p5(function() {}, true);
-    var isDrawingContextDefined = myp5.drawingContext !== undefined;
+    var isDrawingContextDefined = typeof myp5.drawingContext !== 'undefined';
 
     test('should define drawContext synchronously', function() {
       assert.ok(isDrawingContextDefined);
@@ -66,7 +66,7 @@ suite('Core', function() {
 
   suite('new p5(sketch)', function() {
     var myp5 = new p5(function() {});
-    var isDrawingContextDefined = myp5.drawingContext !== undefined;
+    var isDrawingContextDefined = typeof myp5.drawingContext !== 'undefined';
 
     test('should define drawContext asynchronously', function() {
       assert.equal(isDrawingContextDefined, false);
@@ -223,11 +223,11 @@ suite('Core', function() {
 
     setup(function() {
       globalObject = {};
-      logMsg = undefined;
+      logMsg = null;
       bind = createBinder({
         globalObject: globalObject,
         log: function(msg) {
-          if (logMsg !== undefined) {
+          if (logMsg) {
             // For simplicity, we'll write each test so it's expected to
             // log a message at most once.
             throw new Error('log() was called more than once');

@@ -30,7 +30,7 @@ suite('p5.Texture', function() {
         'calling texture()'
     );
     var tex = myp5._renderer.getTexture(src);
-    assert(tex !== undefined, 'texture was undefined');
+    assert(typeof tex !== 'undefined', 'texture was undefined');
     assert(tex instanceof p5.Texture, 'texture was not a p5.Texture object');
     assert(tex.src === src, 'texture did not have expected image as source');
   };

@@ -162,7 +162,7 @@ p5.prototype.createShader = function(vertSrc, fragSrc) {
 p5.prototype.shader = function(s) {
   this._assert3d('shader');
   p5._validateParameters('shader', arguments);
-  if (s._renderer === undefined) {
+  if (typeof s._renderer === 'undefined') {
     s._renderer = this._renderer;
   }
   if (s.isStrokeShader()) {

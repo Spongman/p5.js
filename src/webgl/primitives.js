@@ -276,8 +276,8 @@ var _truncatedCone = function(
   height = height <= 0 ? bottomRadius : height;
   detailX = detailX < 3 ? 3 : detailX;
   detailY = detailY < 1 ? 1 : detailY;
-  bottomCap = bottomCap === undefined ? true : bottomCap;
-  topCap = topCap === undefined ? topRadius !== 0 : topCap;
+  bottomCap = typeof bottomCap === 'undefined' ? true : bottomCap;
+  topCap = typeof topCap === 'undefined' ? topRadius !== 0 : topCap;
   var start = bottomCap ? -2 : 0;
   var end = detailY + (topCap ? 2 : 0);
   var vertsOnLayer = {};
