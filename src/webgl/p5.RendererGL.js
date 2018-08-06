@@ -1,6 +1,6 @@
 'use strict';
 
-var p5 = require('../core/core');
+var p5 = require('../core/main');
 require('./p5.Shader');
 require('../core/p5.Renderer');
 require('./p5.Matrix');
@@ -160,7 +160,7 @@ p5.RendererGL.prototype._initContext = function() {
       );
     }
   } catch (er) {
-    throw new Error(er);
+    throw er;
   }
 };
 
@@ -592,7 +592,7 @@ p5.RendererGL.prototype.strokeWeight = function(w) {
  * @param  {Number}               [w] width
  * @param  {Number}               [h] height
  * @return {Number[]|Color|p5.Image}  color of pixel at x,y in array format
- *                                    [R, G, B, A] or p5.Image
+ *                                    [R, G, B, A] or <a href="#/p5.Image">p5.Image</a>
  */
 p5.RendererGL.prototype.get = function(x, y, w, h) {
   return p5.Renderer2D.prototype.get.apply(this, [x, y, w, h]);
@@ -1016,15 +1016,17 @@ p5.RendererGL.prototype._bindBuffer = function(
 //////////////////////////
 //// SMOOTHING
 /////////////////////////
-// @TODO:
+
 p5.RendererGL.prototype.smooth = function() {
-  //@TODO finish implementation
-  console.log('smoothing not yet implemented in webgl');
+  if (this.attributes.antialias === false) {
+    this._pInst.setAttributes('antialias', true);
+  }
 };
 
 p5.RendererGL.prototype.noSmooth = function() {
-  //@TODO finish implementation
-  console.log('smoothing not yet implemented in webgl');
+  if (this.attributes.antialias === true) {
+    this._pInst.setAttributes('antialias', false);
+  }
 };
 
 ///////////////////////////////

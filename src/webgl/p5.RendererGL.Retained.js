@@ -2,7 +2,7 @@
 //in WEBGL.
 'use strict';
 
-var p5 = require('../core/core');
+var p5 = require('../core/main');
 require('./p5.RendererGL');
 
 // a render buffer definition
@@ -312,6 +312,7 @@ p5.RendererGL.prototype._renderFill = function(geometry, fill, drawMode) {
   }
 
   fill.unbindShader();
+  this._pInst._pixelsDirty = true;
 };
 
 module.exports = p5.RendererGL;

@@ -2,7 +2,7 @@
  * Welcome to RendererGL Immediate Mode.
  * Immediate mode is used for drawing custom shapes
  * from a set of vertices.  Immediate Mode is activated
- * when you call beginShape() & de-activated when you call endShape().
+ * when you call <a href="#/p5/beginShape">beginShape()</a> & de-activated when you call <a href="#/p5/endShape">endShape()</a>.
  * Immediate mode is a style of programming borrowed
  * from OpenGL's (now-deprecated) immediate mode.
  * It differs from p5.js' default, Retained Mode, which caches
@@ -13,14 +13,14 @@
  */
 'use strict';
 
-var p5 = require('../core/core');
+var p5 = require('../core/main');
 var constants = require('../core/constants');
 
 /**
  * Begin shape drawing.  This is a helpful way of generating
  * custom shapes quickly.  However in WEBGL mode, application
  * performance will likely drop as a result of too many calls to
- * beginShape() / endShape().  As a high performance alternative,
+ * <a href="#/p5/beginShape">beginShape()</a> / <a href="#/p5/endShape">endShape()</a>.  As a high performance alternative,
  * please use p5.js geometry primitives.
  * @private
  * @method beginShape
@@ -50,7 +50,7 @@ p5.RendererGL.prototype.beginShape = function(mode) {
  * @param  {Number} y y-coordinate of vertex
  * @param  {Number} z z-coordinate of vertex
  * @chainable
- * @TODO implement handling of p5.Vector args
+ * @TODO implement handling of <a href="#/p5.Vector">p5.Vector</a> args
  */
 p5.RendererGL.prototype.vertex = function(x, y) {
   var z, u, v;
@@ -252,6 +252,7 @@ p5.RendererGL.prototype.endShape = function(
   //im.vertexSpeculars.length = 0;
 
   this.isImmediateDrawing = false;
+  this._pInst._pixelsDirty = true;
 };
 
 module.exports = p5.RendererGL;
