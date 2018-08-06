@@ -157,23 +157,8 @@ if (typeof IS_MINIFIED !== 'undefined') {
   ];
 
   // validateParameters() helper functions:
-  // lookupParamDoc() for querying data.json
-  var lookupParamDoc = function(func) {
-    // look for the docs in the `data.json` datastructure
-
-    var ichDot = func.lastIndexOf('.');
-    var funcName = func.substr(ichDot + 1);
-    var funcClass = func.substr(0, ichDot) || 'p5';
-
-    var queryResult;
-    var classitems = arrDoc.classitems;
-    for (var ici = 0; ici < classitems.length; ici++) {
-      var x = classitems[ici];
-      if (x.name === funcName && x.class === funcClass) {
-        queryResult = x;
-        break;
-      }
-    }
+  var parseParamDoc = function(queryResult) {
+    var func = queryResult.name;
 
     // different JSON structure for funct with multi-format
     var overloads = [];
@@ -595,7 +580,19 @@ if (typeof IS_MINIFIED !== 'undefined') {
 
       // generate err msg
       for (var n = 0; n < errorArray.length; n++) {
-        p5._friendlyParamError(errorArray[n], func);
+        friendlyParamError(errorArray[n], func);
+      }
+    }
+  };
+
+  // this is only for use by the mocha tests
+  p5._validateParameters = function(func, args) {
+    var classitems = arrDoc.classitems;
+    for (var i = 0; i < classitems.length; i++) {
+      var classitem = classitems[i];
+      if (classitem.class === 'p5' && classitem.name === func) {
+        validateParameters(classitem, args);
+        return;
       }
     }
   };

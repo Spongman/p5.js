@@ -523,6 +523,7 @@ p5.prototype.fullscreen = function(val) {
  * @returns {Number} current pixel density of the sketch
  */
 p5.prototype.pixelDensity = function(val) {
+  var returnValue;
   if (typeof val === 'number') {
     if (val !== this._pixelDensity) {
       this._pixelDensity = val;

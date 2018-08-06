@@ -2,6 +2,7 @@ suite('Renderer', function() {
   var myp5;
 
   setup(function(done) {
+    p5._throwValidationErrors = false;
     new p5(function(p) {
       p.setup = function() {
         myp5 = p;
@@ -12,6 +13,7 @@ suite('Renderer', function() {
 
   teardown(function() {
     myp5.remove();
+    p5._throwValidationErrors = true;
   });
 
   suite('p5.prototype.createCanvas', function() {
