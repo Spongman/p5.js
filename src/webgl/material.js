@@ -194,7 +194,7 @@ p5.prototype.resetShader = function() {
   return this;
 };
 
-p5.RendererGL.prototype.shader = function() {
+p5.RendererGL.prototype.resetShader = function() {
   this.curStrokeShader = this.curFillShader = null;
 };
 
