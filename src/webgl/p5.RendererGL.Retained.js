@@ -4,7 +4,6 @@
 
 var p5 = require('../core/main');
 
-var hashCount = 0;
 /**
  * _initBufferDefaults
  * @private
@@ -16,11 +15,11 @@ p5.RendererGL.prototype._initBufferDefaults = function(gId) {
   this._freeBuffers(gId);
 
   //@TODO remove this limit on hashes in gHash
-  hashCount++;
-  if (hashCount > 1000) {
+  this.hashCount++;
+  if (this.hashCount > 1000) {
     var key = Object.keys(this.gHash)[0];
     delete this.gHash[key];
-    hashCount--;
+    this.hashCount--;
   }
 
   //create a new entry in our gHash
@@ -34,7 +33,7 @@ p5.RendererGL.prototype._freeBuffers = function(gId) {
   }
 
   delete this.gHash[gId];
-  hashCount--;
+  this.hashCount--;
 
   var gl = this.GL;
   geometry.vertexBuffer && gl.deleteBuffer(geometry.vertexBuffer);

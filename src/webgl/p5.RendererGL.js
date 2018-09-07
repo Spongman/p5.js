@@ -95,6 +95,7 @@ p5.RendererGL = function(elt, pInst, isMainCanvas, attr) {
 
   //Geometry & Material hashes
   this.gHash = {};
+  this.hashCount = 0;
 
   this._defaultLightShader = undefined;
   this._defaultImmediateModeShader = undefined;
