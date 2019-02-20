@@ -514,11 +514,8 @@ p5.prototype.rect = function() {
  * 55x55 white square with black outline and rounded edges in mid-right of canvas.
  * 55x55 white square with black outline and rounded edges of different radii.
  */
-p5.prototype.square = function() {
-  var args = Array.prototype.slice.call(arguments, 0, 3);
-  args.push(arguments[2]);
-  args = args.concat(Array.prototype.slice.call(arguments, 4));
-  this.rect.apply(this, args);
+p5.prototype.square = function(x, y, s, tl, tr, br, bl) {
+  this.rect(x, y, s, s, tl, tr, br, bl);
 };
 
 /**
@@ -549,7 +546,7 @@ p5.prototype.triangle = function() {
   p5._validateParameters('triangle', arguments);
 
   if (this._renderer._doStroke || this._renderer._doFill) {
-    this._renderer.triangle(arguments);
+    this._renderer.triangle.apply(this._renderer, arguments);
   }
 
   return this;
